@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/navigation_stopwatch"
+    android:title="@string/title_stopwatch"
+    android:icon="@drawable/ic_stopwatch"
+        android:iconTint="@color/black"/>
+
+    <item android:id="@+id/navigation_repeaters"
+        android:title="@string/title_repeaters"
+        android:icon="@drawable/ic_repeaters"
+        android:iconTint="@color/black"/>
+
+    <item android:id="@id/navigation_program"
+        android:title="@string/title_program"
+        android:icon="@drawable/ic_program"
+        android:iconTint="@color/black"/>
+</menu>

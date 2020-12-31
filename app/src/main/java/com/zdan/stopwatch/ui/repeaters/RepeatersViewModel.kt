@@ -15,7 +15,7 @@ private const val TENTH_SECOND: Long = 100
 
 class RepeatersViewModel : ViewModel() {
 
-    private val list = listOf<Repeater>(
+    private val list : List<Repeater> = listOf(
         Repeater(1, "Dead hang", 5000),
         Repeater(2, "Dead hang", 5000),
         Repeater(3, "Dead hang", 5000),
@@ -52,9 +52,12 @@ class RepeatersViewModel : ViewModel() {
 
     private fun startSession() {
         viewModelScope.launch(Dispatchers.IO) {
-            for (item in list) {
+            val iterator = list.listIterator()
+            var item = iterator.next()
+            while (iterator.hasNext() && isOn.value == true) {
                 _positionLiveData.postValue(list.indexOf(item))
                 startItem(item)
+                iterator.next()
             }
         }
     }

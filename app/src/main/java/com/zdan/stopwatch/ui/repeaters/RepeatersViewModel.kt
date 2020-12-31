@@ -15,7 +15,7 @@ private const val TENTH_SECOND: Long = 100
 
 class RepeatersViewModel : ViewModel() {
 
-    private val list : List<Repeater> = listOf(
+    private val list: List<Repeater> = listOf(
         Repeater(1, "Dead hang", 5000),
         Repeater(2, "Dead hang", 5000),
         Repeater(3, "Dead hang", 5000),
@@ -52,26 +52,29 @@ class RepeatersViewModel : ViewModel() {
 
     private fun startSession() {
         viewModelScope.launch(Dispatchers.IO) {
-            val iterator = list.listIterator()
-            var item = iterator.next()
+            var iterator = list.listIterator()
+            _positionLiveData.value?.let { position ->
+                if (position > -1) {
+                    iterator = list.listIterator(position)
+                }
+            }
             while (iterator.hasNext() && isOn.value == true) {
-                _positionLiveData.postValue(list.indexOf(item))
-                startItem(item)
-                iterator.next()
+                _positionLiveData.postValue(iterator.nextIndex())
+                startItem(iterator.next())
             }
         }
     }
 
     private suspend fun startItem(item: Repeater) {
-            var time = item.duration
+        var time = item.duration
         Timber.d("viewModel time: ${time.toStopwatchFormat()}")
-            while (time > 0 && isOn.value == true) {
-                _timeLiveData.postValue(time)
-                delay(TENTH_SECOND)
-                time -= TENTH_SECOND
-            }
+        while (time > 0 && isOn.value == true) {
             _timeLiveData.postValue(time)
+            delay(TENTH_SECOND)
+            time -= TENTH_SECOND
         }
+        _timeLiveData.postValue(time)
+    }
 
     fun getList(): List<Repeater> = list
 

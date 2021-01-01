@@ -15,14 +15,21 @@ private const val TENTH_SECOND: Long = 100
 
 class RepeatersViewModel : ViewModel() {
 
+    private var time: Long = 0
     private val list: List<Repeater> = listOf(
-        Repeater(1, "Dead hang", 5000),
-        Repeater(2, "Dead hang", 5000),
-        Repeater(3, "Dead hang", 5000),
-        Repeater(4, "Dead hang", 5000),
-        Repeater(5, "Dead hang", 5000),
-        Repeater(6, "Dead hang", 5000),
-        Repeater(7, "Rest", 60000)
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Rest", 60000)
     )
 
     private val _positionLiveData = MutableLiveData<Int>(-1)
@@ -66,7 +73,10 @@ class RepeatersViewModel : ViewModel() {
     }
 
     private suspend fun startItem(item: Repeater) {
-        var time = item.duration
+        // get current time if paused
+        if (time == 0L) {
+            time = item.duration
+        }
         Timber.d("viewModel time: ${time.toStopwatchFormat()}")
         while (time > 0 && isOn.value == true) {
             _timeLiveData.postValue(time)
@@ -77,6 +87,5 @@ class RepeatersViewModel : ViewModel() {
     }
 
     fun getList(): List<Repeater> = list
-
 
 }

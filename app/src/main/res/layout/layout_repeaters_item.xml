@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="1"
+        android:textSize="@dimen/text_medium"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Dead hang"
+        android:textSize="@dimen/text_medium"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/txt_number"
@@ -32,13 +34,16 @@
         android:id="@+id/txt_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="05.0"
+        tools:text="00:05.0"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/txt_description"
         app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center"
-        android:textAlignment="gravity"
-        android:layout_margin="@dimen/margin_medium"/>
+        android:textSize="@dimen/text_medium"
+        tools:textSize="@dimen/text_large"
+        android:textAlignment="viewEnd"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_large"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

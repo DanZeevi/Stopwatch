@@ -30,7 +30,7 @@ class RepeatersFragment : BaseFragment(R.layout.fragment_repeaters) {
         viewModel.apply {
             positionLiveData.observe(viewLifecycleOwner) { position ->
                 repeatersAdapter.setCurrent(position)
-                binding.recyclerView.scrollToPosition(position)
+                binding.recyclerView.post { binding.recyclerView.layoutManager?.scrollToPosition(position) }
             }
             timeLiveData.observe(viewLifecycleOwner) {
                 Timber.d("time in fragment: ${it.toStopwatchFormat()}")

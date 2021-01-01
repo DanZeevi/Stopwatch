@@ -8,6 +8,7 @@ import com.zdan.stopwatch.R
 import com.zdan.stopwatch.data.Repeater
 import com.zdan.stopwatch.databinding.LayoutRepeatersItemBinding
 import com.zdan.stopwatch.ui.repeaters.RepeatersAdapter.RepeaterViewHolder
+import com.zdan.stopwatch.util.setTextSizeInSp
 import com.zdan.stopwatch.util.toStopwatchFormat
 import com.zdan.stopwatch.util.toTextFormat
 import timber.log.Timber
@@ -85,23 +86,32 @@ class RepeatersAdapter() : RecyclerView.Adapter<RepeaterViewHolder>() {
             val item = list[position]
             Timber.d("item: $item")
             binding.apply {
-                txtNumber.text = item.number.toString()
+                txtNumber.text = position.toString()
                 txtDescription.text = item.description
                 txtTime.text = item.duration.toTextFormat()
             }
         }
 
-        fun updateTimeTextView(time: Long) {
-            binding.txtTime.text = time.toStopwatchFormat()
+        fun updateTimeTextView(time: Long, showAsStopwatch: Boolean = true) {
+            binding.txtTime.apply {
+                if (showAsStopwatch) {
+                    text = time.toStopwatchFormat()
+                    setTextSizeInSp(R.dimen.text_xlarge)
+                } else {
+                    text = time.toTextFormat()
+                    setTextSizeInSp(R.dimen.text_medium)
+                }
+            }
         }
 
-        fun highlight(boolean: Boolean) {
+        fun highlight(isOn: Boolean) {
             binding.root.apply {
-                background = if (boolean) {
+                background = if (isOn) {
                     ContextCompat.getDrawable(context, R.color.highlight)
                 } else {
                     ContextCompat.getDrawable(context, R.color.white)
                 }
+                updateTimeTextView(list[adapterPosition].duration, isOn)
             }
         }
     }

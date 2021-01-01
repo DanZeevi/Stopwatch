@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.zdan.stopwatch.data.Repeater
 import com.zdan.stopwatch.util.toStopwatchFormat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -15,6 +16,7 @@ private const val TENTH_SECOND: Long = 100
 
 class RepeatersViewModel : ViewModel() {
 
+    private lateinit var job: Job
     private var time: Long = 0
     private val list: List<Repeater> = listOf(
         Repeater("Dead hang", 5000),
@@ -43,7 +45,6 @@ class RepeatersViewModel : ViewModel() {
 
     fun fabClicked() {
         _isOn.value?.let { isOn ->
-            _isOn.value = !isOn
             if (isOn) {
                 stopSession()
             } else {
@@ -54,12 +55,16 @@ class RepeatersViewModel : ViewModel() {
     }
 
     private fun stopSession() {
-        // no_op
+        job.cancel()
+        time = 0L
+        _isOn.value = false
     }
 
     private fun startSession() {
-        viewModelScope.launch(Dispatchers.IO) {
+        _isOn.value = true
+        job = viewModelScope.launch(Dispatchers.IO) {
             var iterator = list.listIterator()
+            // resume from previous position
             _positionLiveData.value?.let { position ->
                 if (position > -1) {
                     iterator = list.listIterator(position)
@@ -87,5 +92,17 @@ class RepeatersViewModel : ViewModel() {
     }
 
     fun getList(): List<Repeater> = list
+
+    fun itemClicked(position: Int) {
+        // starting item
+        _positionLiveData.value = position
+        Timber.d("position clicked: $position")
+        _isOn.value?.let { isOn ->
+            if (isOn) {
+                stopSession()
+                startSession()
+            }
+        }
+    }
 
 }

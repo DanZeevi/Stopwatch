@@ -59,7 +59,9 @@ class RepeatersFragment : BaseFragment(R.layout.fragment_repeaters) {
     }
 
     private fun setRecyclerView() {
-        repeatersAdapter = RepeatersAdapter()
+        repeatersAdapter = RepeatersAdapter { position ->
+            viewModel.itemClicked(position)
+        }
 
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(binding.root.context)

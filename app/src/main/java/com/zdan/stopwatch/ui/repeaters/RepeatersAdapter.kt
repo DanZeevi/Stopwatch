@@ -13,7 +13,7 @@ import com.zdan.stopwatch.util.toStopwatchFormat
 import com.zdan.stopwatch.util.toTextFormat
 import timber.log.Timber
 
-class RepeatersAdapter() : RecyclerView.Adapter<RepeaterViewHolder>() {
+class RepeatersAdapter(val onClickListener: (position: Int) -> Unit) : RecyclerView.Adapter<RepeaterViewHolder>() {
 
     var highlightPosition: Int = -1
 
@@ -86,9 +86,10 @@ class RepeatersAdapter() : RecyclerView.Adapter<RepeaterViewHolder>() {
             val item = list[position]
             Timber.d("item: $item")
             binding.apply {
-                txtNumber.text = position.toString()
+                txtNumber.text = (position + 1).toString()
                 txtDescription.text = item.description
                 txtTime.text = item.duration.toTextFormat()
+                root.setOnClickListener { onClickListener.invoke(position) }
             }
         }
 

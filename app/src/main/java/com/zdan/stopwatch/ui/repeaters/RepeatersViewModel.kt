@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.zdan.stopwatch.data.Repeater
 import com.zdan.stopwatch.util.toStopwatchFormat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -15,14 +16,22 @@ private const val TENTH_SECOND: Long = 100
 
 class RepeatersViewModel : ViewModel() {
 
-    private val list = listOf<Repeater>(
-        Repeater(1, "Dead hang", 5000),
-        Repeater(2, "Dead hang", 5000),
-        Repeater(3, "Dead hang", 5000),
-        Repeater(4, "Dead hang", 5000),
-        Repeater(5, "Dead hang", 5000),
-        Repeater(6, "Dead hang", 5000),
-        Repeater(7, "Rest", 60000)
+    private lateinit var job: Job
+    private var time: Long = 0
+    private val list: List<Repeater> = listOf(
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Dead hang", 5000),
+        Repeater("Rest", 5000),
+        Repeater("Rest", 60000)
     )
 
     private val _positionLiveData = MutableLiveData<Int>(-1)
@@ -36,7 +45,6 @@ class RepeatersViewModel : ViewModel() {
 
     fun fabClicked() {
         _isOn.value?.let { isOn ->
-            _isOn.value = !isOn
             if (isOn) {
                 stopSession()
             } else {
@@ -47,30 +55,54 @@ class RepeatersViewModel : ViewModel() {
     }
 
     private fun stopSession() {
-        // no_op
+        job.cancel()
+        time = 0L
+        _isOn.value = false
     }
 
     private fun startSession() {
-        viewModelScope.launch(Dispatchers.IO) {
-            for (item in list) {
-                _positionLiveData.postValue(list.indexOf(item))
-                startItem(item)
+        _isOn.value = true
+        job = viewModelScope.launch(Dispatchers.IO) {
+            var iterator = list.listIterator()
+            // resume from previous position
+            _positionLiveData.value?.let { position ->
+                if (position > -1) {
+                    iterator = list.listIterator(position)
+                }
+            }
+            while (iterator.hasNext() && isOn.value == true) {
+                _positionLiveData.postValue(iterator.nextIndex())
+                startItem(iterator.next())
             }
         }
     }
 
     private suspend fun startItem(item: Repeater) {
-            var time = item.duration
-        Timber.d("viewModel time: ${time.toStopwatchFormat()}")
-            while (time > 0 && isOn.value == true) {
-                _timeLiveData.postValue(time)
-                delay(TENTH_SECOND)
-                time -= TENTH_SECOND
-            }
-            _timeLiveData.postValue(time)
+        // get current time if paused
+        if (time == 0L) {
+            time = item.duration
         }
+        Timber.d("viewModel time: ${time.toStopwatchFormat()}")
+        while (time > 0 && isOn.value == true) {
+            _timeLiveData.postValue(time)
+            delay(TENTH_SECOND)
+            time -= TENTH_SECOND
+        }
+        _timeLiveData.postValue(time)
+    }
 
     fun getList(): List<Repeater> = list
 
+    fun itemClicked(position: Int) {
+        // starting item
+        _positionLiveData.value = position
+        Timber.d("position clicked: $position")
+        _isOn.value?.let { isOn ->
+            if (isOn) {
+                stopSession()
+                startSession()
+            }
+        }
+    }
 
 }

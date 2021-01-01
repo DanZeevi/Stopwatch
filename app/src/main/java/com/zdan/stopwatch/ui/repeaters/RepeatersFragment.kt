@@ -15,7 +15,7 @@ class RepeatersFragment : BaseFragment(R.layout.fragment_repeaters) {
     private val viewModel: RepeatersViewModel by viewModels()
     private var _binding: FragmentRepeatersBinding? = null
     private val binding: FragmentRepeatersBinding get() = _binding!!
-    private lateinit var repeatersAdapter: RepeatersRecyclerViewAdapter
+    private lateinit var repeatersAdapter: RepeatersAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,7 +30,7 @@ class RepeatersFragment : BaseFragment(R.layout.fragment_repeaters) {
         viewModel.apply {
             positionLiveData.observe(viewLifecycleOwner) { position ->
                 repeatersAdapter.setCurrent(position)
-                binding.recyclerView.scrollToPosition(position)
+                binding.recyclerView.post { binding.recyclerView.layoutManager?.scrollToPosition(position) }
             }
             timeLiveData.observe(viewLifecycleOwner) {
                 Timber.d("time in fragment: ${it.toStopwatchFormat()}")
@@ -39,7 +39,7 @@ class RepeatersFragment : BaseFragment(R.layout.fragment_repeaters) {
             isOn.observe(viewLifecycleOwner) { isOn ->
                 // keep screen on when timer is on
                 keepScreenOn(isOn)
-
+                // change fab icon
                 if (isOn) {
                     binding.fabStart.setImageResource(R.drawable.ic_stop)
                 } else {
@@ -59,7 +59,9 @@ class RepeatersFragment : BaseFragment(R.layout.fragment_repeaters) {
     }
 
     private fun setRecyclerView() {
-        repeatersAdapter = RepeatersRecyclerViewAdapter()
+        repeatersAdapter = RepeatersAdapter { position ->
+            viewModel.itemClicked(position)
+        }
 
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(binding.root.context)

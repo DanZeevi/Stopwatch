@@ -5,12 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zdan.stopwatch.data.Repeater
-import com.zdan.stopwatch.util.toStopwatchFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 private const val TENTH_SECOND: Long = 100
 
@@ -56,7 +54,6 @@ class RepeatersViewModel : ViewModel() {
 
     private fun stopSession() {
         job.cancel()
-        time = 0L
         _isOn.value = false
     }
 
@@ -82,7 +79,7 @@ class RepeatersViewModel : ViewModel() {
         if (time == 0L) {
             time = item.duration
         }
-        Timber.d("viewModel time: ${time.toStopwatchFormat()}")
+
         while (time > 0 && isOn.value == true) {
             _timeLiveData.postValue(time)
             delay(TENTH_SECOND)
@@ -94,10 +91,13 @@ class RepeatersViewModel : ViewModel() {
     fun getList(): List<Repeater> = list
 
     fun itemClicked(position: Int) {
-        // starting item
+        // select item
         _positionLiveData.value = position
-        Timber.d("position clicked: $position")
+        // restart time
+        time = 0L
+
         _isOn.value?.let { isOn ->
+            // start from selected time if timer is running
             if (isOn) {
                 stopSession()
                 startSession()

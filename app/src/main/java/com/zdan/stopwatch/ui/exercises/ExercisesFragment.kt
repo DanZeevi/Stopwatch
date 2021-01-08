@@ -1,6 +1,7 @@
 package com.zdan.stopwatch.ui.exercises
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
@@ -14,6 +15,7 @@ import com.zdan.stopwatch.data.Exercise
 import com.zdan.stopwatch.databinding.DialogAddExerciseBinding
 import com.zdan.stopwatch.databinding.FragmentExercisesBinding
 import com.zdan.stopwatch.util.addAfterTextChangeListener
+import io.realm.RealmResults
 
 private const val REPS_MIN_VALUE: Int = 1
 private const val REPS_MAX_VALUE: Int = 30
@@ -36,8 +38,8 @@ class ExercisesFragment : Fragment(R.layout.fragment_exercises) {
     }
 
     private fun setViews() {
-        setRecyclerView()
         binding.apply {
+            setRecyclerView(root.context, viewModel.realmResults)
             fabAdd.setOnClickListener {
                 viewModel.fabAddClicked()
             }
@@ -46,9 +48,9 @@ class ExercisesFragment : Fragment(R.layout.fragment_exercises) {
 
     private fun setObservers() {
         viewModel.apply {
-            listLiveData.observe(viewLifecycleOwner) { list ->
-                exercisesAdapter.submitList(list)
-            }
+            /*    listLiveData.observe(viewLifecycleOwner) { list ->
+                    exercisesAdapter.submitList(list)
+                }*/
             isAddingLiveData.observe(viewLifecycleOwner) { isAdding ->
                 if (isAdding) {
                     openAddingDialog(viewModel.getTempItem())
@@ -99,12 +101,11 @@ class ExercisesFragment : Fragment(R.layout.fragment_exercises) {
 
     }
 
-    private fun setRecyclerView() {
-        exercisesAdapter = ExercisesAdapter()
-
+    private fun setRecyclerView(context: Context, realmResults: RealmResults<Exercise>) {
+        exercisesAdapter = ExercisesAdapter(realmResults)
         binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(binding.root.context)
-            adapter = exercisesAdapter
+            layoutManager = LinearLayoutManager(context)
+            setAdapter(exercisesAdapter)
         }
     }
 

@@ -5,10 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.zdan.stopwatch.data.Exercise
 import com.zdan.stopwatch.databinding.LayoutExerciseItemBinding
+import io.realm.RealmRecyclerViewAdapter
+import io.realm.RealmResults
 
-class ExercisesAdapter : RecyclerView.Adapter<ExercisesAdapter.ViewHolder>() {
-
-    var list: List<Exercise> = mutableListOf()
+class ExercisesAdapter(var results: RealmResults<Exercise>) :
+    RealmRecyclerViewAdapter<Exercise, ExercisesAdapter.ViewHolder>(
+        results, true, true)
+{
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExercisesAdapter.ViewHolder =
         ViewHolder(
@@ -23,19 +26,15 @@ class ExercisesAdapter : RecyclerView.Adapter<ExercisesAdapter.ViewHolder>() {
         holder.bind(position)
     }
 
-    override fun getItemCount() = list.size
-    fun submitList(newList: List<Exercise>) {
-        list = newList
-    }
-
     inner class ViewHolder(private val binding: LayoutExerciseItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-            val item = list[position]
-            binding.apply{
-                txtNumber.text = (position + 1).toString()
-                txtDescription.text = item.name
-                txtReps.text = item.reps.toString()
+            results[position]?.let { item ->
+                binding.apply {
+                    txtNumber.text = (position + 1).toString()
+                    txtDescription.text = item.name
+                    txtReps.text = item.reps.toString()
+                }
             }
         }
     }

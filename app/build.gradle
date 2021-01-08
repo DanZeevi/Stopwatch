@@ -65,6 +65,14 @@ dependencies {
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
+    // Room recycler view
+    //noinspection GradleDeprecatedConfiguration
+//    compile 'com.github.thorbenprimke:realm-recyclerview:0.9.25'
+    implementation 'io.realm:android-adapters:3.1.0'
+
+    // Swipe refresh layout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
     // Testing
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

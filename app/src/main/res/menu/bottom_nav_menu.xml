@@ -11,8 +11,8 @@
         android:icon="@drawable/ic_repeaters"
         android:iconTint="@color/black"/>
 
-    <item android:id="@id/navigation_program"
-        android:title="@string/title_program"
+    <item android:id="@id/navigation_exercises"
+        android:title="@string/title_exercises"
         android:icon="@drawable/ic_program"
         android:iconTint="@color/black"/>
 </menu>

@@ -9,5 +9,10 @@
     <string name="title_activity_main2">MainActivity</string>
     <string name="title_stopwatch">Stopwatch</string>
     <string name="title_repeaters">Repeaters</string>
-    <string name="title_program">Program</string>
+    <string name="title_exercises">Exercises</string>
+    <string name="content_description_add">add</string>
+    <string name="hint_exercise_name">Exercise name or description</string>
+    <string name="dialog_add_title">Add exercise</string>
+    <string name="btn_dialog_add_positive">Add</string>
+    <string name="btn_dialog_add_negative">Cancel</string>
 </resources>

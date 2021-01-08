@@ -1,6 +1,9 @@
 package com.zdan.stopwatch.util
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.TypedValue
+import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.DimenRes
 
@@ -59,4 +62,22 @@ fun Long.toTextFormat(): String {
 
 fun TextView.setTextSizeInSp(@DimenRes dimenRes: Int) {
     setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(dimenRes))
+}
+
+fun EditText.addAfterTextChangeListener(function: (string: Editable?) -> Unit) {
+    addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(
+            s: CharSequence?, start: Int, count: Int, after: Int) { /* no-op */}
+
+        override fun onTextChanged(
+            string: CharSequence?,
+            start: Int,
+            before: Int,
+            count: Int
+        ) { /* no-op */ }
+
+        override fun afterTextChanged(string: Editable?) {
+            function.invoke(string)
+        }
+    })
 }

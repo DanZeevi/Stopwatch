@@ -1,4 +1,4 @@
-package com.zdan.stopwatch.data
+package com.zdan.stopwatch.data.exercise
 
 import io.realm.RealmObject
 import java.util.*

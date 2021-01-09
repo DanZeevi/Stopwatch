@@ -3,18 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.exercises.ExercisesFragment">
 
-<!--    <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
-        android:id="@+id/realm_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:rrvLayoutType="LinearLayout"
-        app:rrvSwipeToDelete="true"
-        app:rrvIsRefreshable="true"
-        app:rrvEmptyLayoutId="@layout/layout_exercise_item"
-        />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

@@ -3,7 +3,7 @@ package com.zdan.stopwatch.ui.exercises
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.zdan.stopwatch.data.Exercise
+import com.zdan.stopwatch.data.exercise.Exercise
 import com.zdan.stopwatch.databinding.LayoutExerciseItemBinding
 import io.realm.RealmRecyclerViewAdapter
 import io.realm.RealmResults

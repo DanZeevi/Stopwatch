@@ -8,7 +8,7 @@ import com.zdan.stopwatch.databinding.LayoutExerciseItemBinding
 import io.realm.RealmRecyclerViewAdapter
 import io.realm.RealmResults
 
-class ExercisesAdapter(var results: RealmResults<Exercise>) :
+class ExercisesAdapter(var results: RealmResults<Exercise>, val onClick: (position: Int) -> Unit) :
     RealmRecyclerViewAdapter<Exercise, ExercisesAdapter.ViewHolder>(
         results, true, true)
 {
@@ -34,6 +34,8 @@ class ExercisesAdapter(var results: RealmResults<Exercise>) :
                     txtNumber.text = (position + 1).toString()
                     txtDescription.text = item.name
                     txtReps.text = item.reps.toString()
+                    // on click
+                    root.setOnClickListener { onClick(position) }
                 }
             }
         }

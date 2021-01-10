@@ -13,6 +13,9 @@
     <string name="content_description_add">add</string>
     <string name="hint_exercise_name">Exercise name or description</string>
     <string name="dialog_add_title">Add exercise</string>
+    <string name="dialog_edit_title">Edit exercise</string>
     <string name="btn_dialog_add_positive">Add</string>
     <string name="btn_dialog_add_negative">Cancel</string>
+    <string name="exercise_fragment_error">Error! Exercise had no name</string>
+    <string name="btn_dialog_edit_positive">Update</string>
 </resources>

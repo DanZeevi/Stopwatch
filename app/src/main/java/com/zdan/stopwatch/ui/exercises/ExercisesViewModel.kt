@@ -30,6 +30,14 @@ class ExercisesViewModel : ViewModel() {
 
     fun getTempItem(): Exercise? = tempItem
 
+    fun setTempItem(item: Exercise?) {
+        tempItem = if (item == null) {
+            Exercise()
+        } else {
+            Exercise(item)
+        }
+    }
+
     fun addItem() {
         Timber.d("item: $tempItem")
         tempItem?.let { item ->
@@ -42,34 +50,50 @@ class ExercisesViewModel : ViewModel() {
                 _showErrorToast.value = true
             }
         } ?: run {
-            _showErrorToast.value = true
+            Timber.e("update item null")
         }
     }
 
     fun addingCancelled() {
         _isAddingLiveData.value = false
         tempItem = null
-        _showErrorToast.value = true
+        _showErrorToast.value = false
     }
 
     fun updateName(name: String?) {
-        if (name != null) {
-            if (tempItem == null) {
-                tempItem = Exercise()
-            }
-            tempItem!!.name = name
+        Timber.d("update name: $name")
+        tempItem?.name = name ?: ""
+    }
+
+    fun updateReps(reps: Int) {
+        Timber.d("update reps: $reps")
+        tempItem?.reps = reps
+    }
+
+    fun getItem(position: Int): Exercise? = realmResults[position]
+
+    fun updateItem() {
+        Timber.d("item: $tempItem")
+        if (isExerciseValid(tempItem)) {
+            repository.updateItem(tempItem!!)
+            _isAddingLiveData.value = false
+            _showErrorToast.value = false
+            tempItem = null
         } else {
             _showErrorToast.value = true
         }
     }
 
-    fun updateReps(reps: Int) {
-        if (tempItem == null) {
-            tempItem = Exercise(name = "", reps = reps)
+    private fun isExerciseValid(item: Exercise?): Boolean {
+        return if (item != null) {
+            if (item.name.isNotBlank()) {
+                true
+            } else {
+                false
+            }
         } else {
-            tempItem!!.reps = reps
+            false
         }
-        _showErrorToast.value = true
     }
 
     override fun onCleared() {

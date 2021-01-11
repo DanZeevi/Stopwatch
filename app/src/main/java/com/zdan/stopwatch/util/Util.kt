@@ -13,6 +13,13 @@ const val HOURS = "hour"
 const val MINUTES = "minute"
 const val SECONDS = "seconds"
 
+fun Long.toPreTimeFormat() =
+    if (this % 1000 > 100) {
+        (this / 1000 + 1).toString()
+    } else {
+        (this / 1000).toString()
+    }
+
 fun Long.toStopwatchFormat(): String {
     val tenthSecond = this / 100 % 10
     val timeInSeconds = this / 1000
@@ -20,7 +27,7 @@ fun Long.toStopwatchFormat(): String {
     val minutes = timeInSeconds / 60
     val hours = minutes / 60
 
-    var stringBuilder = StringBuilder()
+    val stringBuilder = StringBuilder()
     if (hours > 0) {
         stringBuilder.append(hours)
         stringBuilder.append(DELIMITER)
@@ -35,7 +42,8 @@ fun Long.toStopwatchFormat(): String {
 }
 
 private fun formatWithLeadingZero(long: Long) = if (long < 10) {
-    "0$long" } else {
+    "0$long"
+} else {
     long.toString()
 }
 
@@ -45,7 +53,9 @@ fun Long.toTextFormat(): String {
     val minutes = timeInSeconds / 60
     val hours = minutes / 60
 
-    if (this == 60000L) { return "60 S" }
+    if (this == 60000L) {
+        return "60 S"
+    }
 
     val hoursString = if (hours > 0) {
         "$hours $HOURS "
@@ -67,14 +77,17 @@ fun TextView.setTextSizeInSp(@DimenRes dimenRes: Int) {
 fun EditText.addAfterTextChangeListener(function: (string: Editable?) -> Unit) {
     addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(
-            s: CharSequence?, start: Int, count: Int, after: Int) { /* no-op */}
+            s: CharSequence?, start: Int, count: Int, after: Int
+        ) { /* no-op */
+        }
 
         override fun onTextChanged(
             string: CharSequence?,
             start: Int,
             before: Int,
             count: Int
-        ) { /* no-op */ }
+        ) { /* no-op */
+        }
 
         override fun afterTextChanged(string: Editable?) {
             function.invoke(string)

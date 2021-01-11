@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.zdan.stopwatch.R
 import com.zdan.stopwatch.databinding.FragmentRepeatersBinding
 import com.zdan.stopwatch.ui.common.BaseFragment
+import com.zdan.stopwatch.util.toPreTimeFormat
 import com.zdan.stopwatch.util.toStopwatchFormat
 import timber.log.Timber
 
@@ -29,12 +30,24 @@ class RepeatersFragment : BaseFragment(R.layout.fragment_repeaters) {
     private fun setObservers() {
         viewModel.apply {
             positionLiveData.observe(viewLifecycleOwner) { position ->
+                // TODO: fix scroll to position
                 repeatersAdapter.setCurrent(position)
-                binding.recyclerView.post { binding.recyclerView.layoutManager?.scrollToPosition(position) }
+                binding.recyclerView.post {
+                    binding.recyclerView.layoutManager?.scrollToPosition(
+                        position
+                    )
+                }
             }
-            timeLiveData.observe(viewLifecycleOwner) {
-                Timber.d("time in fragment: ${it.toStopwatchFormat()}")
-                repeatersAdapter.updateTimeTextView(it)
+            timeLiveData.observe(viewLifecycleOwner) { time ->
+
+                if (viewModel.positionLiveData.value == viewModel.POSITION_PRE_TIME) {
+                    // update pre-time
+                    updatePreTimeTextView(time)
+                } else {
+                    // update time of repeater item
+                    Timber.d("time in fragment: ${time.toStopwatchFormat()}")
+                    repeatersAdapter.updateTimeTextView(time)
+                }
             }
             isOn.observe(viewLifecycleOwner) { isOn ->
                 // keep screen on when timer is on
@@ -46,6 +59,9 @@ class RepeatersFragment : BaseFragment(R.layout.fragment_repeaters) {
                     binding.fabStart.setImageResource(R.drawable.ic_start)
                 }
             }
+            isPreTimeOn.observe(viewLifecycleOwner) { isPreTimeOn ->
+                showPreTime(isPreTimeOn)
+            }
         }
     }
 
@@ -53,7 +69,10 @@ class RepeatersFragment : BaseFragment(R.layout.fragment_repeaters) {
         setRecyclerView()
         binding.apply {
             fabStart.setOnClickListener {
-                viewModel.fabClicked()
+                viewModel.fabStartClicked()
+            }
+            fabReset.setOnClickListener {
+                viewModel.fabResetClicked()
             }
         }
     }
@@ -62,13 +81,24 @@ class RepeatersFragment : BaseFragment(R.layout.fragment_repeaters) {
         repeatersAdapter = RepeatersAdapter { position ->
             viewModel.itemClicked(position)
         }
-
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(binding.root.context)
             adapter = repeatersAdapter
             setHasFixedSize(true)
         }
         repeatersAdapter.submitList(viewModel.getList())
+    }
+
+    private fun updatePreTimeTextView(time: Long) {
+        binding.txtPreTime.text = time.toPreTimeFormat()
+    }
+
+    private fun showPreTime(show: Boolean) {
+        binding.layoutPreTime.visibility = if (show) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 
     override fun onDestroy() {

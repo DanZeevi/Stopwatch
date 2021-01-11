@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/layout_pre_time"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="@dimen/pre_time_size"
+    android:layout_height="@dimen/pre_time_size"
+    android:layout_gravity="center"
+    android:translationZ="1dp"
+    android:visibility="gone"
+    tools:visibility="visible"
+    android:padding="@dimen/padding_small"
+    android:background="@drawable/bg_pre_time">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/text_xlarge"
+        android:textAlignment="center"
+        android:text="@string/text_pre_time_title"
+        android:layout_marginTop="@dimen/margin_xxlarge"/>
+
+    <TextView
+        android:id="@+id/txt_pre_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_huge"
+        tools:text="3"/>
+
+</LinearLayout>

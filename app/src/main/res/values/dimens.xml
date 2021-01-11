@@ -10,8 +10,12 @@
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_xlarge">30dp</dimen>
+
     <dimen name="ic_btn_size">48dp</dimen>
+    <dimen name="pre_time_size">300dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="margin_xxlarge">36dp</dimen>
 </resources>

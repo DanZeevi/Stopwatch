@@ -1,24 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.repeaters.RepeatersFragment">
 
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recycler_view"
-      android:layout_height="match_parent"
-      android:layout_width="match_parent"
-      tools:listitem="@layout/layout_repeaters_item"
-      />
+<!--<include layout="@layout/layout_pre_time"/>-->
+    <LinearLayout
+        android:id="@+id/layout_pre_time"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="@dimen/pre_time_size"
+        android:layout_height="@dimen/pre_time_size"
+        android:layout_gravity="center"
+        android:translationZ="1dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:padding="@dimen/padding_small"
+        android:background="@drawable/bg_pre_time">
 
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-      android:id="@+id/fab_start"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-    android:layout_gravity="end|bottom"
-      android:src="@drawable/ic_start"
-    android:layout_margin="@dimen/margin_medium"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/text_xlarge"
+            android:textAlignment="center"
+            android:text="@string/text_pre_time_title"
+            android:layout_marginTop="@dimen/margin_xxlarge"/>
+
+        <TextView
+            android:id="@+id/txt_pre_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_huge"
+            tools:text="3"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/layout_repeaters_item" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/margin_medium"
+        android:src="@drawable/ic_start" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_margin="@dimen/margin_medium"
+        android:src="@drawable/ic_reset" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

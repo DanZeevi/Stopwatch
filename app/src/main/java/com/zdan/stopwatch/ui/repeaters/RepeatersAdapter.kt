@@ -11,7 +11,6 @@ import com.zdan.stopwatch.ui.repeaters.RepeatersAdapter.RepeaterViewHolder
 import com.zdan.stopwatch.util.setTextSizeInSp
 import com.zdan.stopwatch.util.toStopwatchFormat
 import com.zdan.stopwatch.util.toTextFormat
-import timber.log.Timber
 
 class RepeatersAdapter(val onClickListener: (position: Int) -> Unit) : RecyclerView.Adapter<RepeaterViewHolder>() {
 
@@ -34,10 +33,8 @@ class RepeatersAdapter(val onClickListener: (position: Int) -> Unit) : RecyclerV
         position: Int,
         payloads: MutableList<Any>
     ) {
-        Timber.d("Payloads: $payloads")
         if (payloads.isNotEmpty()) {
             for (payload in payloads) {
-                Timber.d("Payload: $payload")
                 handlePayload(payload, holder)
             }
         } else {
@@ -65,7 +62,6 @@ class RepeatersAdapter(val onClickListener: (position: Int) -> Unit) : RecyclerV
     }
 
     fun setCurrent(position: Int) {
-        Timber.d("current: $position")
         // unhighlight previous
         if (highlightPosition >= 0) {
             notifyItemChanged(highlightPosition, false)
@@ -76,7 +72,6 @@ class RepeatersAdapter(val onClickListener: (position: Int) -> Unit) : RecyclerV
     }
 
     fun updateTimeTextView(time: Long) {
-        Timber.d("time: ${time.toStopwatchFormat()}")
         notifyItemChanged(highlightPosition, time)
     }
 
@@ -84,7 +79,6 @@ class RepeatersAdapter(val onClickListener: (position: Int) -> Unit) : RecyclerV
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             val item = list[position]
-            Timber.d("item: $item")
             binding.apply {
                 txtNumber.text = (position + 1).toString()
                 txtDescription.text = item.description

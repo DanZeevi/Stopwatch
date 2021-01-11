@@ -18,4 +18,5 @@
     <string name="btn_dialog_add_negative">Cancel</string>
     <string name="exercise_fragment_error">Error! Exercise had no name</string>
     <string name="btn_dialog_edit_positive">Update</string>
+    <string name="text_pre_time_title">Get ready!</string>
 </resources>

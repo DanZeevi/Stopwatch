@@ -11,9 +11,14 @@ open class Exercise(
     var reps: Int = 1
 ): RealmObject()
 {
+    // copy constructor
     constructor(exercise: Exercise) : this() {
         this.id = exercise.id
         this.name = exercise.name
         this.reps = exercise.reps
+    }
+
+    companion object {
+        const val ID_KEY = "id"
     }
 }

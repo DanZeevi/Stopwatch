@@ -24,9 +24,7 @@ class ExercisesViewModel : ViewModel() {
 
     private var tempItem: Exercise? = null
 
-    fun fabAddClicked() {
-        _isAddingLiveData.value = true
-    }
+    fun getItem(position: Int): Exercise? = realmResults[position]
 
     fun getTempItem(): Exercise? = tempItem
 
@@ -36,6 +34,10 @@ class ExercisesViewModel : ViewModel() {
         } else {
             Exercise(item)
         }
+    }
+
+    fun fabAddClicked() {
+        _isAddingLiveData.value = true
     }
 
     fun addItem() {
@@ -70,8 +72,6 @@ class ExercisesViewModel : ViewModel() {
         tempItem?.reps = reps
     }
 
-    fun getItem(position: Int): Exercise? = realmResults[position]
-
     fun updateItem() {
         Timber.d("item: $tempItem")
         if (isExerciseValid(tempItem)) {
@@ -81,6 +81,13 @@ class ExercisesViewModel : ViewModel() {
             tempItem = null
         } else {
             _showErrorToast.value = true
+        }
+    }
+
+    fun onItemSwiped(position: Int) {
+        // delete
+        realmResults[position]?.let { item ->
+            repository.deleteItem(item.id)
         }
     }
 
@@ -97,7 +104,9 @@ class ExercisesViewModel : ViewModel() {
     }
 
     override fun onCleared() {
+        Timber.d("view model clearing")
         repository.onDestroy()
         super.onCleared()
     }
+
 }

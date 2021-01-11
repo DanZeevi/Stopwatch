@@ -11,11 +11,14 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.zdan.stopwatch.R
 import com.zdan.stopwatch.data.exercise.Exercise
 import com.zdan.stopwatch.databinding.DialogExerciseItemBinding
 import com.zdan.stopwatch.databinding.FragmentExercisesBinding
+import com.zdan.stopwatch.util.SwipeToDeleteCallback
 import com.zdan.stopwatch.util.addAfterTextChangeListener
 import io.realm.RealmResults
 import timber.log.Timber
@@ -43,6 +46,7 @@ class ExercisesFragment : Fragment(R.layout.fragment_exercises) {
     private fun setViews() {
         binding.apply {
             setRecyclerView(root.context, viewModel.realmResults)
+            setSwipeCallback(recyclerView)
             fabAdd.setOnClickListener {
                 viewModel.fabAddClicked()
             }
@@ -143,6 +147,17 @@ class ExercisesFragment : Fragment(R.layout.fragment_exercises) {
             layoutManager = LinearLayoutManager(context)
             adapter = exercisesAdapter
         }
+    }
+
+    private fun setSwipeCallback(recyclerView: RecyclerView) {
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback(recyclerView.context) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                viewModel.onItemSwiped(position)
+            }
+        }
+        ItemTouchHelper(swipeToDeleteCallback)
+            .attachToRecyclerView(recyclerView)
     }
 
     override fun onDestroy() {
